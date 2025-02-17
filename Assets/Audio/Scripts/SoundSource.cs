@@ -2,58 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundSource : MonoBehaviour
+namespace RedHeadToolz.AudioChannel
 {
-    [SerializeField]private AudioSource source;
-    private float killTime = 0f;
-    private float currentTime = 0f;
-    public bool Playing => source.isPlaying;
-    public AudioClip Clip => source.clip;
-    public bool Expired => currentTime > killTime;
-
-    public void Init(float kTime = 0f)
+    public class SoundSource : MonoBehaviour
     {
-        killTime = kTime;
-    }
+        [SerializeField] private AudioSource source;
+        private float killTime = 0f;
+        private float currentTime = 0f;
+        public bool Playing => source.isPlaying;
+        public AudioClip Clip => source.clip;
+        public bool Expired => currentTime > killTime;
 
-    public void Play(AudioClip clip)
-    {
-        source.Stop();
-        currentTime = 0;
-        source.clip = clip;
-        source.loop = false;
-        source.Play();
-    }
+        public void Init(float kTime = 0f)
+        {
+            killTime = kTime;
+        }
 
-    public void Loop(AudioClip clip)
-    {
-        source.Stop();
-        currentTime = 0;
-        source.clip = clip;
-        source.loop = true;
-        source.Play();
-    }
+        public void Play(AudioClip clip)
+        {
+            source.Stop();
+            currentTime = 0;
+            source.clip = clip;
+            source.loop = false;
+            source.Play();
+        }
 
-    public void Stop()
-    {
-        source.Stop();
-    }
+        public void Loop(AudioClip clip)
+        {
+            source.Stop();
+            currentTime = 0;
+            source.clip = clip;
+            source.loop = true;
+            source.Play();
+        }
 
-    public void Tick()
-    {
-        if(Playing)return;
+        public void Stop()
+        {
+            source.Stop();
+        }
 
-        currentTime += Time.deltaTime;
-        // if(currentTime > killTime)
-    }
+        public void Tick()
+        {
+            if(Playing)return;
 
-    public void Mute()
-    {
-        source.volume = 0;
-    }
+            currentTime += Time.deltaTime;
+            // if(currentTime > killTime)
+        }
 
-    public void Unmute()
-    {
-        source.volume = 1;
+        public void Mute()
+        {
+            source.volume = 0;
+        }
+
+        public void Unmute()
+        {
+            source.volume = 1;
+        }
     }
 }
