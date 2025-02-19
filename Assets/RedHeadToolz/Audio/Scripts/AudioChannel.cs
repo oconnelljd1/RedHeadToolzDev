@@ -6,7 +6,7 @@ using UnityEngine;
 namespace RedHeadToolz.Audio
 {
 
-    public class Audio : MonoBehaviour
+    public class AudioChannel : MonoBehaviour
     {
         public bool Muted => _muted;
         [SerializeField] private GameObject _sourcePrefab;
@@ -16,6 +16,18 @@ namespace RedHeadToolz.Audio
         int poolSize = 1;
         private float killTime = 10f;
         private bool _muted = false;
+
+        public bool IsPlaying
+        {
+            get
+            {
+                foreach(var source in _sources)
+                {
+                    if(source.Playing) return true;
+                }
+                return false;
+            }
+        }
 
         public void Init(string id, int poolSize = 1, float killTime = 10f)
         {
