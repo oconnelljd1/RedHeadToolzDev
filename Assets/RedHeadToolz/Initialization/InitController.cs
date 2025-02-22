@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using RedHeadToolz.Audio;
 
-namespace RedHeadToolz.Tools
+namespace RedHeadToolz.Utils
 {
     public class InitController : MonoBehaviour
     {
+        [SerializeField] private string nextScene;
+        [SerializeField] private List<BaseModule> modules;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -19,9 +22,31 @@ namespace RedHeadToolz.Tools
         // Update is called once per frame
         void Update()
         {
-            if (AudioController.Instance == null) return;
+            bool allInitialized = true;
+            foreach(BaseModule module in modules)
+            {
+                if(module.InitState == InitializationState.NotInitialized)
+                {
+                    module.Init();
+                    break;
+                }
+                else if(module.InitState == InitializationState.Initializing)
+                {
+                    allInitialized = false;
+                    break;
+                }
+                else if(module.InitState == InitializationState.Initialized)
+                {
+                    module.Update(Time.deltaTime);
+                }
+            }
 
-            SceneManager.LoadScene("MainMenu");
+            // should add some way to represent percentage of modules loaded
+
+            if(allInitialized)
+            {
+                SceneManager.LoadScene(nextScene);
+            }
         }
     }
 }
